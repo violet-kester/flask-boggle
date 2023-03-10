@@ -14,7 +14,7 @@ games = {}
 def homepage():
     """Show board."""
 
-    # TODO: add to the test to check that correct HTML was returned
+    # DONE: add to the test to check that correct HTML was returned
 
     return render_template("index.html")
 
@@ -28,5 +28,5 @@ def new_game():
     game = BoggleGame()
     games[game_id] = game
 
-    # TODO: add real id, real board, return JSON
+    # DONE: add real id, real board, return JSON
     return jsonify({"gameId": game_id, "board": game.board})

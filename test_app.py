@@ -23,16 +23,18 @@ class BoggleAppTestCase(TestCase):
 
         with self.client as client:
             response = client.get('/')
-            # TODO: check that correct HTML was returned
+            # DONE: check that correct HTML was returned
             html = response.get_data(as_text=True)
 
             self.assertEqual(response.status_code, 200)
-            self.assertIn('<table class="board">', html)
+            self.assertIn('<!-- Test: this is the boggle homepage -->', html)
             # test that you're getting a template
+            # DONE: consider selecting something more specific, like a hidden "test:" comment
 
     def test_api_new_game(self):
         """Test starting a new game."""
 
         with self.client as client:
             ...
+            # TODO:
             # write a test for this route

@@ -17,6 +17,9 @@ class WordList:
             True
             >>> wl.check_word('dog')
             False
+            >>> wl.check_word('HEEEE')
+            False
+            # TODO: move this into check_word
         """
 
         self.words = self._read_dict(dict_path)
