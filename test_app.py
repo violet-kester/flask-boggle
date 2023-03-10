@@ -35,6 +35,15 @@ class BoggleAppTestCase(TestCase):
         """Test starting a new game."""
 
         with self.client as client:
-            ...
-            # TODO:
-            # write a test for this route
+            response = client.post("/api/new-game")
+            json = response.get_json()
+            # TODO: (DONE - Code review needed)
+            # test that the response has attr "gameId"
+            self.assertIn("gameId", json)
+            # test that attr board is a list
+            self.assertIsInstance(json["board"], list)
+            # test that attr board contains only lists
+            self.assertFalse([False for row in json["board"] if not isinstance(row, list)])
+            # test that games dictionary contains this gameId
+            self.assertIn(json["gameId"], games)
+
