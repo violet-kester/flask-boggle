@@ -36,16 +36,63 @@ class BoggleAppTestCase(TestCase):
 
         with self.client as client:
             response = client.post("/api/new-game")
-            json = response.get_json() # <-- NOTE: this is not json. this is a dict
+            game_data = response.get_json() # <-- NOTE: this is not json. this is a dict
 
-            # TODO: (DONE - Code review needed)
+            # TODO: READY -
             # test that the response has attr "gameId"
-            self.assertIn("gameId", json)
+            self.assertIn("gameId", game_data)
             # test that attr board is a list
-            self.assertIsInstance(json["board"], list)
+            self.assertIsInstance(game_data["board"], list)
             # test that attr board contains only lists
-            # NOTE: we could possibly use assertEqual(a,b) to see if json["board"] is equal to []
-            self.assertFalse([False for row in json["board"] if not isinstance(row, list)])
+            # TODO: NOTE: we could possibly use assertEqual(a,b) to see if game_data["board"] is equal to []
+            self.assertFalse([False for row in game_data["board"] if not isinstance(row, list)])
             # test that games dictionary contains this gameId
-            self.assertIn(json["gameId"], games)
+            self.assertIn(game_data["gameId"], games)
 
+    def test_api_score_word(self):
+        """ Integration test for score route. Testing"""
+        with self.client as client:
+            new_game_response = client.post("/api/new-game")
+            gameId = new_game_response.get_json()["gameId"]
+        # NOTE: testing frameworks randomize order of tests - so you couldn't have relied on new game test
+        #        Each test should stand alone
+        # Change board letters
+        # access the game by gameId, and change letters to be our okay word only
+        boggle_game_instance = games[gameId]
+        boggle_game_instance.board[0] = ["D", "O", "G", "X", "X"]
+
+        # Okay test
+        okay_word = "DOG"
+        with self.client as client:
+            score_word_response = client.post(
+                "/api/score-word",
+                json={"gameId": gameId, "wordInput":okay_word}
+            )
+
+            result = score_word_response.get_json() # this is the object of {result: _____}
+
+            self.assertEqual(result, {"result":"ok"})
+
+        # Not on board test
+        not_on_board_word = "ALCOVES"
+        with self.client as client:
+            score_word_response = client.post(
+                "/api/score-word",
+                json={"gameId": gameId, "wordInput":not_on_board_word}
+            )
+
+            result = score_word_response.get_json() # this is the object of {result: _____}
+
+            self.assertEqual(result, {"result":"not-on-board"})
+
+        # Not a word test
+        not_word = "Qalkdsjf"
+        with self.client as client:
+            score_word_response = client.post(
+                "/api/score-word",
+                json={"gameId": gameId, "wordInput":not_word}
+            )
+
+            result = score_word_response.get_json() # this is the object of {result: _____}
+
+            self.assertEqual(result, {"result":"not-word"})
