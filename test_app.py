@@ -29,20 +29,22 @@ class BoggleAppTestCase(TestCase):
             self.assertEqual(response.status_code, 200)
             self.assertIn('<!-- Test: this is the boggle homepage -->', html)
             # test that you're getting a template
-            # DONE: consider selecting something more specific, like a hidden "test:" comment
+            # DONE: select something specific, like a hidden "Test:" comment
 
     def test_api_new_game(self):
         """Test starting a new game."""
 
         with self.client as client:
             response = client.post("/api/new-game")
-            json = response.get_json()
+            json = response.get_json() # <-- NOTE: this is not json. this is a dict
+
             # TODO: (DONE - Code review needed)
             # test that the response has attr "gameId"
             self.assertIn("gameId", json)
             # test that attr board is a list
             self.assertIsInstance(json["board"], list)
             # test that attr board contains only lists
+            # NOTE: we could possibly use assertEqual(a,b) to see if json["board"] is equal to []
             self.assertFalse([False for row in json["board"] if not isinstance(row, list)])
             # test that games dictionary contains this gameId
             self.assertIn(json["gameId"], games)

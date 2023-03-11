@@ -12,14 +12,6 @@ class WordList:
             >>> wl.words == {'CAT', 'DOG'}
             True
 
-            # TODO: write a doctest for WordList.check_word
-            >>> wl.check_word('DOG')
-            True
-            >>> wl.check_word('dog')
-            False
-            >>> wl.check_word('HEEEE')
-            False
-            # TODO: move this into check_word
         """
 
         self.words = self._read_dict(dict_path)
@@ -37,7 +29,16 @@ class WordList:
         return words
 
     def check_word(self, word):
-        """Is word in word list?"""
+        """Is word in word list?
+
+            # TODO: write a doctest for WordList.check_word
+            >>> wl.check_word('DOG')
+            True
+            >>> wl.check_word('dog')
+            False
+            >>> wl.check_word('HEEEE')
+            False
+        """
 
         return word in self.words
 
